@@ -245,7 +245,7 @@ public class GLRenderer implements Renderer {
         GLES20.glGenTextures(1, texturenames, 0);
 
         // Temporary create a bitmap
-        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.carrom_board);
+        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.coin_red);
 
         // Bind texture to texturename
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);

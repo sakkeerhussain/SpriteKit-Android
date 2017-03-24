@@ -1,18 +1,18 @@
 package com.explorerz.carroms.activities;
 
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
-import com.explorerz.carroms.GLRenderer;
+import com.explorerz.carroms.GLSurf;
 import com.explorerz.carroms.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GLSurfaceView glSurfaceView;
+    private GLSurf glSurfaceView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,14 +20,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
-
-        glSurfaceView = (GLSurfaceView) findViewById(R.id.game_canvas);
-        glSurfaceView.setDebugFlags(GLSurfaceView.DEBUG_LOG_GL_CALLS);
-        glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        glSurfaceView.setEGLContextClientVersion(2);
-        glSurfaceView.setRenderer(new GLRenderer(this.getApplicationContext()));
-        glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        FrameLayout parentLayout = (FrameLayout) findViewById(R.id.parentLayout);
+        glSurfaceView = new GLSurf(this.getApplicationContext());
+        parentLayout.addView(glSurfaceView);
     }
 
     @Override
