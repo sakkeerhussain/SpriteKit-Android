@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         glSurfaceView = (GLSurfaceView) findViewById(R.id.game_canvas);
-        //Chose EGL Config Here To Set Element Size For RGB data Alpha,
         glSurfaceView.setDebugFlags(GLSurfaceView.DEBUG_LOG_GL_CALLS);
         glSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         glSurfaceView.setEGLContextClientVersion(2);
