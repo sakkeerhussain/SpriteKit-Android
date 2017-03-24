@@ -170,14 +170,14 @@ public class GLRenderer implements Renderer {
         // Set the clear color to black
         GLES20.glClearColor(235f / 255.0f, 235f / 255.0f, 255f / 255.0f, 255f / 255.0f);
 
-        // Create the shaders
+        // Create the shaders, solid color
         int vertexShader = riGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER, riGraphicTools.vs_SolidColor);
         int fragmentShader = riGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER, riGraphicTools.fs_SolidColor);
 
-        riGraphicTools.sp_SolidColor = GLES20.glCreateProgram();             // create empty OpenGL ES Program
-        GLES20.glAttachShader(riGraphicTools.sp_SolidColor, vertexShader);   // add the vertex shader to program
-        GLES20.glAttachShader(riGraphicTools.sp_SolidColor, fragmentShader); // add the fragment shader to program
-        GLES20.glLinkProgram(riGraphicTools.sp_SolidColor);                  // creates OpenGL ES program executables
+        riGraphicTools.sp_SolidColor = GLES20.glCreateProgram();
+        GLES20.glAttachShader(riGraphicTools.sp_SolidColor, vertexShader);
+        GLES20.glAttachShader(riGraphicTools.sp_SolidColor, fragmentShader);
+        GLES20.glLinkProgram(riGraphicTools.sp_SolidColor);
 
         // Create the shaders, images
         vertexShader = riGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER,
@@ -191,7 +191,7 @@ public class GLRenderer implements Renderer {
         GLES20.glLinkProgram(riGraphicTools.sp_Image);
 
         // Set our shader programm
-        GLES20.glUseProgram(riGraphicTools.sp_SolidColor);
+        GLES20.glUseProgram(riGraphicTools.sp_Image);
     }
 
     public void SetupTriangle()
