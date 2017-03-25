@@ -6,7 +6,6 @@ package com.explorerz.carroms;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLUtils;
@@ -39,29 +38,27 @@ public class GLRenderer implements Renderer {
     public FloatBuffer uvBuffer;
 
     // Our screenresolution
-    float   mScreenWidth = 1280;
-    float   mScreenHeight = 768;
+    float mScreenWidth = 1280;
+    float mScreenHeight = 768;
 
     // Misc
     Context mContext;
     long mLastTime;
     int mProgram;
 
-    public Rect imagePosition;
+    public CaromBoard boardBgSprite;
 
-    public GLRenderer(Context c)
-    {
+    public GLRenderer(Context c) {
         mContext = c;
         mLastTime = System.currentTimeMillis() + 100;
+        boardBgSprite = new CaromBoard();
     }
 
-    public void onPause()
-    {
+    public void onPause() {
         /* Do stuff to pause the renderer */
     }
 
-    public void onResume()
-    {
+    public void onResume() {
         /* Do stuff to resume the renderer */
         mLastTime = System.currentTimeMillis();
     }
@@ -79,16 +76,17 @@ public class GLRenderer implements Renderer {
         long elapsed = now - mLastTime;
 
         // Update our example
+        updateSprite();
 
         // Render our example
-        Render(mtrxProjectionAndView);
+        render(mtrxProjectionAndView);
 
         // Save the current time to see how long it took <img src="http://androidblog.reindustries.com/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley"> .
         mLastTime = now;
 
     }
 
-    private void Render(float[] m) {
+    private void render(float[] m) {
 
         // clear Screen and Depth Buffer, we have set the clear color as black.
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -105,13 +103,13 @@ public class GLRenderer implements Renderer {
                 0, vertexBuffer);
 
         // Get handle to texture coordinates location
-        int mTexCoordLoc = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "a_texCoord" );
+        int mTexCoordLoc = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "a_texCoord");
 
         // Enable generic vertex attribute array
-        GLES20.glEnableVertexAttribArray ( mTexCoordLoc );
+        GLES20.glEnableVertexAttribArray(mTexCoordLoc);
 
         // Prepare the texturecoordinates
-        GLES20.glVertexAttribPointer ( mTexCoordLoc, 2, GLES20.GL_FLOAT,
+        GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT,
                 false,
                 0, uvBuffer);
 
@@ -122,10 +120,10 @@ public class GLRenderer implements Renderer {
         GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, m, 0);
 
         // Get handle to textures locations
-        int mSamplerLoc = GLES20.glGetUniformLocation (riGraphicTools.sp_Image, "s_texture" );
+        int mSamplerLoc = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "s_texture");
 
         // Set the sampler texture unit to 0, where we have saved the texture.
-        GLES20.glUniform1i ( mSamplerLoc, 0);
+        GLES20.glUniform1i(mSamplerLoc, 0);
 
         // Draw the triangle
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length,
@@ -142,13 +140,13 @@ public class GLRenderer implements Renderer {
         // We need to know the current width and height.
         mScreenWidth = width;
         mScreenHeight = height;
+        Sprite.setBoardRatio(width, height);
 
         // Redo the Viewport, making it fullscreen.
-        GLES20.glViewport(0, 0, (int)mScreenWidth, (int)mScreenHeight);
+        GLES20.glViewport(0, 0, (int) mScreenWidth, (int) mScreenHeight);
 
         // Clear our matrices
-        for(int i=0;i<16;i++)
-        {
+        for (int i = 0; i < 16; i++) {
             mtrxProjection[i] = 0.0f;
             mtrxView[i] = 0.0f;
             mtrxProjectionAndView[i] = 0.0f;
@@ -198,18 +196,11 @@ public class GLRenderer implements Renderer {
         GLES20.glUseProgram(riGraphicTools.sp_Image);
     }
 
-    public void SetupTriangle()
-    {
+    public void SetupTriangle() {
         // We have create the vertices of our view.
-        vertices = new float[]
-                {
-                        10.0f, 200f, 0.0f,
-                        10.0f, 100f, 0.0f,
-                        100f, 100f, 0.0f,
-                        100f, 200f, 0.0f,
-                };
+        vertices = boardBgSprite.getTransformedVertices();
 
-        indices = new short[] {0, 1, 2, 0, 2, 3};
+        indices = new short[]{0, 1, 2, 0, 2, 3};
 
         // The vertex buffer.
         ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -227,21 +218,14 @@ public class GLRenderer implements Renderer {
 
     }
 
-    public void setUpImage()
-    {
+    public void setUpImage() {
         // Create our UV coordinates.
-        uvs = new float[] {
+        uvs = new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
                 1.0f, 1.0f,
                 1.0f, 0.0f
         };
-
-        imagePosition = new Rect();
-        imagePosition.left = 10;
-        imagePosition.right = 100;
-        imagePosition.bottom = 100;
-        imagePosition.top = 200;
 
         // The texture buffer
         ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
@@ -255,7 +239,7 @@ public class GLRenderer implements Renderer {
         GLES20.glGenTextures(1, texturenames, 0);
 
         // Temporary create a bitmap
-        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.coin_red);
+        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.carrom_board);
 
         // Bind texture to texturename
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -281,13 +265,10 @@ public class GLRenderer implements Renderer {
 
     }
 
-    public void translateSprite(){
-        vertices = new float[]
-                {imagePosition.left, imagePosition.top, 0.0f,
-                        imagePosition.left, imagePosition.bottom, 0.0f,
-                        imagePosition.right, imagePosition.bottom, 0.0f,
-                        imagePosition.right, imagePosition.top, 0.0f,
-                };
+    public void updateSprite() {
+        // Get new transformed vertices
+        vertices = boardBgSprite.getTransformedVertices();
+
         // The vertex buffer.
         ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -297,14 +278,25 @@ public class GLRenderer implements Renderer {
     }
 
     public void processTouchEvent(MotionEvent event) {
-        int imageCenter = imagePosition.left + imagePosition.right / 2;
-        if(event.getX() < imageCenter) {
-            imagePosition.left -= 10;
-            imagePosition.right -= 10;
+        // Get the half of screen value
+        int screenhalf = (int) (mScreenWidth / 2);
+        int screenheightpart = (int) (mScreenHeight / 3);
+        if (event.getX() < screenhalf) {
+            // Left screen touch
+            if (event.getY() < screenheightpart)
+                boardBgSprite.scale(-0.01f);
+            else if (event.getY() < (screenheightpart * 2))
+                boardBgSprite.translate(-10f, -10f);
+            else
+                boardBgSprite.rotate(0.01f);
         } else {
-            imagePosition.left += 10;
-            imagePosition.right += 10;
+            // Right screen touch
+            if (event.getY() < screenheightpart)
+                boardBgSprite.scale(0.01f);
+            else if (event.getY() < (screenheightpart * 2))
+                boardBgSprite.translate(10f, 10f);
+            else
+                boardBgSprite.rotate(-0.01f);
         }
-        translateSprite();
     }
 }

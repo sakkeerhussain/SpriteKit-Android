@@ -13,46 +13,38 @@ public class Texture {
 
     private int textureID[] = {0};
     private int width, height;
-    public Texture(final Context context, int resourceId)
-    {
-        loadTexture(context,resourceId);
+
+    public Texture(final Context context, int resourceId) {
+        loadTexture(context, resourceId);
     }
 
-    public void Destroy()
-    {
-        GLES20.glDeleteTextures(1, textureID,0);
+    public void Destroy() {
+        GLES20.glDeleteTextures(1, textureID, 0);
     }
 
 
-    public int getTextureID()
-    {
+    public int getTextureID() {
         return textureID[0];
     }
 
-    public int getWidth()
-    {
+    public int getWidth() {
         return width;
     }
 
-    public int getHeight()
-    {
+    public int getHeight() {
         return height;
     }
 
-    public void BindTexture(int id)
-    {
+    public void BindTexture(int id) {
         GLES20.glActiveTexture(id);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID[0]);
     }
 
-    private void loadTexture(final Context context, final int resourceId)
-    {
+    private void loadTexture(final Context context, final int resourceId) {
         GLES20.glGenTextures(1, textureID, 0);
 
-        try
-        {
-            if (textureID[0] != 0)
-            {
+        try {
+            if (textureID[0] != 0) {
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inScaled = false;   // No pre-scaling
 
@@ -83,14 +75,11 @@ public class Texture {
                 bitmap.recycle();
             }
 
-            if (textureID[0] == 0)
-            {
+            if (textureID[0] == 0) {
                 throw new RuntimeException("Error loading texture.");
             }
-        }
-        catch (Exception e)
-        {
-            GLES20.glDeleteTextures(1, textureID,0);
+        } catch (Exception e) {
+            GLES20.glDeleteTextures(1, textureID, 0);
             textureID[0] = 0;
             throw e;
         }
