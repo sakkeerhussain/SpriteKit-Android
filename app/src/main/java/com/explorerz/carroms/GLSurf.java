@@ -2,6 +2,7 @@ package com.explorerz.carroms;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.MotionEvent;
 
 public class GLSurf extends GLSurfaceView {
 
@@ -28,5 +29,11 @@ public class GLSurf extends GLSurfaceView {
 		super.onResume();
 		mRenderer.onResume();
 	}
+
+	@Override
+    public boolean onTouchEvent(MotionEvent e) {
+        mRenderer.processTouchEvent(e);
+        return true;
+    }
 
 }

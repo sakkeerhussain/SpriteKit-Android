@@ -6,10 +6,12 @@ package com.explorerz.carroms;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.view.MotionEvent;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -44,6 +46,8 @@ public class GLRenderer implements Renderer {
     Context mContext;
     long mLastTime;
     int mProgram;
+
+    public Rect imagePosition;
 
     public GLRenderer(Context c)
     {
@@ -233,6 +237,12 @@ public class GLRenderer implements Renderer {
                 1.0f, 0.0f
         };
 
+        imagePosition = new Rect();
+        imagePosition.left = 10;
+        imagePosition.right = 100;
+        imagePosition.bottom = 100;
+        imagePosition.top = 200;
+
         // The texture buffer
         ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -269,5 +279,32 @@ public class GLRenderer implements Renderer {
         // We are done using the bitmap so we should recycle it.
         bmp.recycle();
 
+    }
+
+    public void translateSprite(){
+        vertices = new float[]
+                {imagePosition.left, imagePosition.top, 0.0f,
+                        imagePosition.left, imagePosition.bottom, 0.0f,
+                        imagePosition.right, imagePosition.bottom, 0.0f,
+                        imagePosition.right, imagePosition.top, 0.0f,
+                };
+        // The vertex buffer.
+        ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer.put(vertices);
+        vertexBuffer.position(0);
+    }
+
+    public void processTouchEvent(MotionEvent event) {
+        int imageCenter = imagePosition.left + imagePosition.right / 2;
+        if(event.getX() < imageCenter) {
+            imagePosition.left -= 10;
+            imagePosition.right -= 10;
+        } else {
+            imagePosition.left += 10;
+            imagePosition.right += 10;
+        }
+        translateSprite();
     }
 }
