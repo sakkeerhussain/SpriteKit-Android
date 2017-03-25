@@ -13,6 +13,7 @@ import android.opengl.Matrix;
 import android.view.MotionEvent;
 
 import com.explorerz.carroms.ui.CaromBoardSprite;
+import com.explorerz.carroms.ui.RedCaromSprite;
 import com.explorerz.carroms.ui.Sprite;
 
 import java.nio.ByteBuffer;
@@ -23,8 +24,6 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static android.opengl.GLES10.GL_CLAMP_TO_EDGE;
-
 class GLRenderer implements Renderer {
 
     // Our matrices
@@ -33,7 +32,7 @@ class GLRenderer implements Renderer {
     private final float[] mtrxProjectionAndView = new float[16];
 
     // Geometric variables
-    private static float vertices[];
+    private static float[] vertices;
     private static short indices[];
     private static float uvs[];
     private FloatBuffer vertexBuffer;
@@ -41,20 +40,22 @@ class GLRenderer implements Renderer {
     private FloatBuffer uvBuffer;
 
     // Our screenresolution
-    float mScreenWidth = 1280;
-    float mScreenHeight = 768;
+    private float mScreenWidth = 1280;
+    private float mScreenHeight = 768;
 
     // Misc
-    Context mContext;
-    long mLastTime;
+    private Context mContext;
+    private long mLastTime;
     int mProgram;
 
-    public CaromBoardSprite boardBgSprite;
+    private CaromBoardSprite boardBgSprite;
+    private RedCaromSprite redCaromSprite;
 
-    public GLRenderer(Context c) {
+    GLRenderer(Context c) {
         mContext = c;
         mLastTime = System.currentTimeMillis() + 100;
         boardBgSprite = new CaromBoardSprite();
+        redCaromSprite = new RedCaromSprite();
     }
 
     public void onPause() {
@@ -169,7 +170,7 @@ class GLRenderer implements Renderer {
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-        SetupTriangle();
+        setupTriangle();
         setUpImage();
 
         // Set the clear color to black
@@ -199,11 +200,30 @@ class GLRenderer implements Renderer {
         GLES20.glUseProgram(riGraphicTools.sp_Image);
     }
 
-    public void SetupTriangle() {
-        // We have create the vertices of our view.
-        vertices = boardBgSprite.getTransformedVertices();
+    private void setupTriangle() {
+        // Our collection of vertices
+        float[] vertices1 = boardBgSprite.getTransformedVertices();
+        float[] vertices2 = redCaromSprite.getTransformedVertices();
+        vertices = Utils.concat(vertices1, vertices2);
 
-        indices = new short[]{0, 1, 2, 0, 2, 3};
+        // The indices for all textured quads
+        indices = new short[2*6];
+        int last = 0;
+        for(int i=0;i<2;i++)
+        {
+            // We need to set the new indices for the new quad
+            indices[(i*6) + 0] = (short) (last + 0);
+            indices[(i*6) + 1] = (short) (last + 1);
+            indices[(i*6) + 2] = (short) (last + 2);
+            indices[(i*6) + 3] = (short) (last + 0);
+            indices[(i*6) + 4] = (short) (last + 2);
+            indices[(i*6) + 5] = (short) (last + 3);
+
+            // Our indices are connected to the vertices so we need to keep them
+            // in the correct order.
+            // normal quad = 0,1,2,0,2,3 so the next one will be 4,5,6,4,6,7
+            last = last + 4;
+        }
 
         // The vertex buffer.
         ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -218,17 +238,23 @@ class GLRenderer implements Renderer {
         drawListBuffer = dlb.asShortBuffer();
         drawListBuffer.put(indices);
         drawListBuffer.position(0);
-
     }
 
-    public void setUpImage() {
+    private void setUpImage() {
         // Create our UV coordinates.
-        uvs = new float[]{
+        float[] uvs1 = new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
                 1.0f, 1.0f,
                 1.0f, 0.0f
         };
+        float[] uvs2 = new float[]{
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f
+        };
+        uvs = Utils.concat(uvs1, uvs2);
 
         // The texture buffer
         ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
@@ -241,6 +267,7 @@ class GLRenderer implements Renderer {
         int[] texturenames = new int[1];
         GLES20.glGenTextures(1, texturenames, 0);
 
+
         // Temporary create a bitmap
         Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.carrom_board);
 
@@ -249,16 +276,8 @@ class GLRenderer implements Renderer {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0]);
 
         // Set filtering
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
-                GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
-                GLES20.GL_LINEAR);
-
-        // Set wrapping mode
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
-                GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
-                GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 
         // Load the bitmap into the bound texture.
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
@@ -266,11 +285,31 @@ class GLRenderer implements Renderer {
         // We are done using the bitmap so we should recycle it.
         bmp.recycle();
 
+        //setting up second texture
+        texturenames = new int[1];
+        GLES20.glGenTextures(1, texturenames, 0);
+        bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.coin_red);
+
+        // Bind texture to texturename
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0]);
+
+        // Set filtering
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
+
+        // We are done using the bitmap so we should recycle it.
+        bmp.recycle();
     }
 
     public void updateSprite() {
         // Get new transformed vertices
-        vertices = boardBgSprite.getTransformedVertices();
+        float[] vertices1 = boardBgSprite.getTransformedVertices();
+        float[] vertices2 = redCaromSprite.getTransformedVertices();
+        vertices = Utils.concat(vertices1, vertices2);
 
         // The vertex buffer.
         ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -287,19 +326,19 @@ class GLRenderer implements Renderer {
         if (event.getX() < screenhalf) {
             // Left screen touch
             if (event.getY() < screenheightpart)
-                boardBgSprite.scale(-0.01f);
+                redCaromSprite.scale(-0.01f);
             else if (event.getY() < (screenheightpart * 2))
-                boardBgSprite.translate(-10f, -10f);
+                redCaromSprite.translate(-10f, -10f);
             else
-                boardBgSprite.rotate(0.01f);
+                redCaromSprite.rotate(0.01f);
         } else {
             // Right screen touch
             if (event.getY() < screenheightpart)
-                boardBgSprite.scale(0.01f);
+                redCaromSprite.scale(0.01f);
             else if (event.getY() < (screenheightpart * 2))
-                boardBgSprite.translate(10f, 10f);
+                redCaromSprite.translate(10f, 10f);
             else
-                boardBgSprite.rotate(-0.01f);
+                redCaromSprite.rotate(-0.01f);
         }
     }
 }
