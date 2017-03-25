@@ -12,6 +12,9 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.view.MotionEvent;
 
+import com.explorerz.carroms.ui.CaromBoardSprite;
+import com.explorerz.carroms.ui.Sprite;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -22,7 +25,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import static android.opengl.GLES10.GL_CLAMP_TO_EDGE;
 
-public class GLRenderer implements Renderer {
+class GLRenderer implements Renderer {
 
     // Our matrices
     private final float[] mtrxProjection = new float[16];
@@ -30,12 +33,12 @@ public class GLRenderer implements Renderer {
     private final float[] mtrxProjectionAndView = new float[16];
 
     // Geometric variables
-    public static float vertices[];
-    public static short indices[];
-    public static float uvs[];
-    public FloatBuffer vertexBuffer;
-    public ShortBuffer drawListBuffer;
-    public FloatBuffer uvBuffer;
+    private static float vertices[];
+    private static short indices[];
+    private static float uvs[];
+    private FloatBuffer vertexBuffer;
+    private ShortBuffer drawListBuffer;
+    private FloatBuffer uvBuffer;
 
     // Our screenresolution
     float mScreenWidth = 1280;
@@ -46,12 +49,12 @@ public class GLRenderer implements Renderer {
     long mLastTime;
     int mProgram;
 
-    public CaromBoard boardBgSprite;
+    public CaromBoardSprite boardBgSprite;
 
     public GLRenderer(Context c) {
         mContext = c;
         mLastTime = System.currentTimeMillis() + 100;
-        boardBgSprite = new CaromBoard();
+        boardBgSprite = new CaromBoardSprite();
     }
 
     public void onPause() {

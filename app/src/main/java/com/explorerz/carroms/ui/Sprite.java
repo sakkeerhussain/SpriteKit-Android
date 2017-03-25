@@ -1,4 +1,4 @@
-package com.explorerz.carroms;
+package com.explorerz.carroms.ui;
 /*
  * Created by sakkeer hussain on 25/03/17.
  */
@@ -12,7 +12,7 @@ import com.explorerz.carroms.game.Game;
 @param boardRation: Ration between game UI and game engine, (UI_width/1000)
  */
 
-class Sprite {
+public class Sprite {
     private static float boardRatio;
     protected static float boardSideWidth;
     protected float angle;
