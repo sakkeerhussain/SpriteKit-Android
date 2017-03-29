@@ -5,31 +5,31 @@ package com.explorerz.carroms;
 
 import android.opengl.GLES20;
 
-public class riGraphicTools {
+class RiGraphicTools {
 
     // Program variables
-    public static int sp_SolidColor;
-    public static int sp_Image;
+    static int sp_SolidColor;
+    static int sp_Image;
 
     /* SHADER Solid
      *
      * This shader is for rendering a colored primitive.
      *
      */
-    public static final String vs_SolidColor =
+    static final String vs_SolidColor =
             "uniform    mat4        uMVPMatrix;" +
                     "attribute  vec4        vPosition;" +
                     "void main() {" +
                     "  gl_Position = uMVPMatrix * vPosition;" +
                     "}";
 
-    public static final String fs_SolidColor =
+    static final String fs_SolidColor =
             "precision mediump float;" +
                     "void main() {" +
                     "  gl_FragColor = vec4(0.5,0,0,1);" +
                     "}";
 
-    public static final String vs_Image =
+    static final String vs_Image =
             "uniform mat4 uMVPMatrix;" +
                     "attribute vec4 vPosition;" +
                     "attribute vec2 a_texCoord;" +
@@ -38,7 +38,7 @@ public class riGraphicTools {
                     "  gl_Position = uMVPMatrix * vPosition;" +
                     "  v_texCoord = a_texCoord;" +
                     "}";
-    public static final String fs_Image =
+    static final String fs_Image =
             "precision mediump float;" +
                     "varying vec2 v_texCoord;" +
                     "uniform sampler2D s_texture;" +
@@ -46,7 +46,7 @@ public class riGraphicTools {
                     "  gl_FragColor = texture2D( s_texture, v_texCoord );" +
                     "}";
 
-    public static int loadShader(int type, String shaderCode){
+    static int loadShader(int type, String shaderCode){
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
         // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)

@@ -105,7 +105,7 @@ class GLRenderer implements Renderer {
         draw2(m);
 
 //        // get handle to vertex shader's vPosition member
-//        int mPositionHandle = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "vPosition");
+//        int mPositionHandle = GLES20.glGetAttribLocation(RiGraphicTools.sp_Image, "vPosition");
 //
 //        // Enable generic vertex attribute array
 //        GLES20.glEnableVertexAttribArray(mPositionHandle);
@@ -116,7 +116,7 @@ class GLRenderer implements Renderer {
 //                0, vertexBuffer);
 //
 //        // Get handle to texture coordinates location
-//        int mTexCoordLoc = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "a_texCoord");
+//        int mTexCoordLoc = GLES20.glGetAttribLocation(RiGraphicTools.sp_Image, "a_texCoord");
 //
 //        // Enable generic vertex attribute array
 //        GLES20.glEnableVertexAttribArray(mTexCoordLoc);
@@ -127,13 +127,13 @@ class GLRenderer implements Renderer {
 //                0, uvBuffer);
 //
 //        // Get handle to shape's transformation matrix
-//        int mtrxhandle = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "uMVPMatrix");
+//        int mtrxhandle = GLES20.glGetUniformLocation(RiGraphicTools.sp_Image, "uMVPMatrix");
 //
 //        // Apply the projection and view transformation
 //        GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, m, 0);
 //
 //        // Get handle to textures locations
-//        int mSamplerLoc = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "s_texture");
+//        int mSamplerLoc = GLES20.glGetUniformLocation(RiGraphicTools.sp_Image, "s_texture");
 //
 //        // Set the sampler texture unit to 0, where we have saved the texture.
 //        GLES20.glUniform1i(mSamplerLoc, 0);
@@ -154,7 +154,7 @@ class GLRenderer implements Renderer {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, bgTextureId);
 
         // get handle to vertex shader's vPosition member
-        int mPositionHandle = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "vPosition");
+        int mPositionHandle = GLES20.glGetAttribLocation(RiGraphicTools.sp_Image, "vPosition");
 
         // Enable generic vertex attribute array
         GLES20.glEnableVertexAttribArray(mPositionHandle);
@@ -165,7 +165,7 @@ class GLRenderer implements Renderer {
                 0, vertexBuffer);
 
         // Get handle to texture coordinates location
-        int mTexCoordLoc = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "a_texCoord");
+        int mTexCoordLoc = GLES20.glGetAttribLocation(RiGraphicTools.sp_Image, "a_texCoord");
 
         // Enable generic vertex attribute array
         GLES20.glEnableVertexAttribArray(mTexCoordLoc);
@@ -176,13 +176,13 @@ class GLRenderer implements Renderer {
                 0, uvBuffer);
 
         // Get handle to shape's transformation matrix
-        int mtrxhandle = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "uMVPMatrix");
+        int mtrxhandle = GLES20.glGetUniformLocation(RiGraphicTools.sp_Image, "uMVPMatrix");
 
         // Apply the projection and view transformation
         GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, m, 0);
 
         // Get handle to textures locations
-        int mSamplerLoc = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "s_texture");
+        int mSamplerLoc = GLES20.glGetUniformLocation(RiGraphicTools.sp_Image, "s_texture");
 
         // Set the sampler texture unit to 0, where we have saved the texture.
         GLES20.glUniform1i(mSamplerLoc, 0);
@@ -201,7 +201,7 @@ class GLRenderer implements Renderer {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, redTextureId);
 
         // get handle to vertex shader's vPosition member
-        int mPositionHandle = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "vPosition");
+        int mPositionHandle = GLES20.glGetAttribLocation(RiGraphicTools.sp_Image, "vPosition");
 
         // Enable generic vertex attribute array
         GLES20.glEnableVertexAttribArray(mPositionHandle);
@@ -212,7 +212,7 @@ class GLRenderer implements Renderer {
                 0, vertexBuffer);
 
         // Get handle to texture coordinates location
-        int mTexCoordLoc = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "a_texCoord");
+        int mTexCoordLoc = GLES20.glGetAttribLocation(RiGraphicTools.sp_Image, "a_texCoord");
 
         // Enable generic vertex attribute array
         GLES20.glEnableVertexAttribArray(mTexCoordLoc);
@@ -223,13 +223,13 @@ class GLRenderer implements Renderer {
                 0, uvBuffer);
 
         // Get handle to shape's transformation matrix
-        int mtrxhandle = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "uMVPMatrix");
+        int mtrxhandle = GLES20.glGetUniformLocation(RiGraphicTools.sp_Image, "uMVPMatrix");
 
         // Apply the projection and view transformation
         GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, m, 0);
 
         // Get handle to textures locations
-        int mSamplerLoc = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "s_texture");
+        int mSamplerLoc = GLES20.glGetUniformLocation(RiGraphicTools.sp_Image, "s_texture");
 
         // Set the sampler texture unit to 0, where we have saved the texture.
         GLES20.glUniform1i(mSamplerLoc, 0);
@@ -282,27 +282,27 @@ class GLRenderer implements Renderer {
         GLES20.glClearColor(235f / 255.0f, 235f / 255.0f, 255f / 255.0f, 255f / 255.0f);
 
         // Create the shaders, solid color
-        int vertexShader = riGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER, riGraphicTools.vs_SolidColor);
-        int fragmentShader = riGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER, riGraphicTools.fs_SolidColor);
+        int vertexShader = RiGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER, RiGraphicTools.vs_SolidColor);
+        int fragmentShader = RiGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER, RiGraphicTools.fs_SolidColor);
 
-        riGraphicTools.sp_SolidColor = GLES20.glCreateProgram();
-        GLES20.glAttachShader(riGraphicTools.sp_SolidColor, vertexShader);
-        GLES20.glAttachShader(riGraphicTools.sp_SolidColor, fragmentShader);
-        GLES20.glLinkProgram(riGraphicTools.sp_SolidColor);
+        RiGraphicTools.sp_SolidColor = GLES20.glCreateProgram();
+        GLES20.glAttachShader(RiGraphicTools.sp_SolidColor, vertexShader);
+        GLES20.glAttachShader(RiGraphicTools.sp_SolidColor, fragmentShader);
+        GLES20.glLinkProgram(RiGraphicTools.sp_SolidColor);
 
         // Create the shaders, images
-        vertexShader = riGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER,
-                riGraphicTools.vs_Image);
-        fragmentShader = riGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER,
-                riGraphicTools.fs_Image);
+        vertexShader = RiGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER,
+                RiGraphicTools.vs_Image);
+        fragmentShader = RiGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER,
+                RiGraphicTools.fs_Image);
 
-        riGraphicTools.sp_Image = GLES20.glCreateProgram();
-        GLES20.glAttachShader(riGraphicTools.sp_Image, vertexShader);
-        GLES20.glAttachShader(riGraphicTools.sp_Image, fragmentShader);
-        GLES20.glLinkProgram(riGraphicTools.sp_Image);
+        RiGraphicTools.sp_Image = GLES20.glCreateProgram();
+        GLES20.glAttachShader(RiGraphicTools.sp_Image, vertexShader);
+        GLES20.glAttachShader(RiGraphicTools.sp_Image, fragmentShader);
+        GLES20.glLinkProgram(RiGraphicTools.sp_Image);
 
         // Set our shader programm
-        GLES20.glUseProgram(riGraphicTools.sp_Image);
+        GLES20.glUseProgram(RiGraphicTools.sp_Image);
     }
 
     private void setupTriangle() {
@@ -367,6 +367,8 @@ class GLRenderer implements Renderer {
         // Set filtering
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
         // Load the bitmap into the bound texture.
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
@@ -387,6 +389,8 @@ class GLRenderer implements Renderer {
         // Set filtering
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
         // Load the bitmap into the bound texture.
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
