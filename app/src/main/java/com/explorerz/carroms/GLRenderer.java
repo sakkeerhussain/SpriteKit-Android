@@ -32,9 +32,11 @@ class GLRenderer implements Renderer {
     private final float[] mtrxProjectionAndView = new float[16];
 
     // Geometric variables
-    private static float[] vertices;
+    private static float[] vertices1;
+    private static float[] vertices2;
     private static short indices[];
-    private static float uvs[];
+    private static float uvs1[];
+    private static float uvs2[];
     private FloatBuffer vertexBuffer;
     private ShortBuffer drawListBuffer;
     private FloatBuffer uvBuffer;
@@ -50,6 +52,11 @@ class GLRenderer implements Renderer {
 
     private CaromBoardSprite boardBgSprite;
     private RedCaromSprite redCaromSprite;
+
+
+
+    private int bgTextureId;
+    private int redTextureId;
 
     GLRenderer(Context c) {
         mContext = c;
@@ -78,10 +85,6 @@ class GLRenderer implements Renderer {
 
         // Get the amount of time the last frame took.
         long elapsed = now - mLastTime;
-
-        // Update our example
-        updateSprite();
-
         // Render our example
         render(mtrxProjectionAndView);
 
@@ -94,6 +97,108 @@ class GLRenderer implements Renderer {
 
         // clear Screen and Depth Buffer, we have set the clear color as black.
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        // Update our example
+        updateSprite(boardBgSprite);
+        draw1(m);
+        updateSprite(redCaromSprite);
+        draw2(m);
+
+//        // get handle to vertex shader's vPosition member
+//        int mPositionHandle = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "vPosition");
+//
+//        // Enable generic vertex attribute array
+//        GLES20.glEnableVertexAttribArray(mPositionHandle);
+//
+//        // Prepare the triangle coordinate data
+//        GLES20.glVertexAttribPointer(mPositionHandle, 3,
+//                GLES20.GL_FLOAT, false,
+//                0, vertexBuffer);
+//
+//        // Get handle to texture coordinates location
+//        int mTexCoordLoc = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "a_texCoord");
+//
+//        // Enable generic vertex attribute array
+//        GLES20.glEnableVertexAttribArray(mTexCoordLoc);
+//
+//        // Prepare the texturecoordinates
+//        GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT,
+//                false,
+//                0, uvBuffer);
+//
+//        // Get handle to shape's transformation matrix
+//        int mtrxhandle = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "uMVPMatrix");
+//
+//        // Apply the projection and view transformation
+//        GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, m, 0);
+//
+//        // Get handle to textures locations
+//        int mSamplerLoc = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "s_texture");
+//
+//        // Set the sampler texture unit to 0, where we have saved the texture.
+//        GLES20.glUniform1i(mSamplerLoc, 0);
+//
+//        // Draw the triangle
+//        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length,
+//                GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+//
+//        // Disable vertex array
+//        GLES20.glDisableVertexAttribArray(mPositionHandle);
+//        GLES20.glDisableVertexAttribArray(mTexCoordLoc);
+    }
+
+    private void draw1(float[] m) {
+
+
+        GLES20.glActiveTexture(0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, bgTextureId);
+
+        // get handle to vertex shader's vPosition member
+        int mPositionHandle = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "vPosition");
+
+        // Enable generic vertex attribute array
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+
+        // Prepare the triangle coordinate data
+        GLES20.glVertexAttribPointer(mPositionHandle, 3,
+                GLES20.GL_FLOAT, false,
+                0, vertexBuffer);
+
+        // Get handle to texture coordinates location
+        int mTexCoordLoc = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "a_texCoord");
+
+        // Enable generic vertex attribute array
+        GLES20.glEnableVertexAttribArray(mTexCoordLoc);
+
+        // Prepare the texturecoordinates
+        GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT,
+                false,
+                0, uvBuffer);
+
+        // Get handle to shape's transformation matrix
+        int mtrxhandle = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "uMVPMatrix");
+
+        // Apply the projection and view transformation
+        GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, m, 0);
+
+        // Get handle to textures locations
+        int mSamplerLoc = GLES20.glGetUniformLocation(riGraphicTools.sp_Image, "s_texture");
+
+        // Set the sampler texture unit to 0, where we have saved the texture.
+        GLES20.glUniform1i(mSamplerLoc, 0);
+
+        // Draw the triangle
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length,
+                GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+
+        // Disable vertex array
+        GLES20.glDisableVertexAttribArray(mPositionHandle);
+        GLES20.glDisableVertexAttribArray(mTexCoordLoc);
+    }
+
+    private void draw2(float[] m) {
+        GLES20.glActiveTexture(0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, redTextureId);
 
         // get handle to vertex shader's vPosition member
         int mPositionHandle = GLES20.glGetAttribLocation(riGraphicTools.sp_Image, "vPosition");
@@ -202,34 +307,18 @@ class GLRenderer implements Renderer {
 
     private void setupTriangle() {
         // Our collection of vertices
-        float[] vertices1 = boardBgSprite.getTransformedVertices();
-        float[] vertices2 = redCaromSprite.getTransformedVertices();
-        vertices = Utils.concat(vertices1, vertices2);
+        vertices1 = boardBgSprite.getTransformedVertices();
+        vertices2 = redCaromSprite.getTransformedVertices();
 
         // The indices for all textured quads
-        indices = new short[2*6];
-        int last = 0;
-        for(int i=0;i<2;i++)
-        {
-            // We need to set the new indices for the new quad
-            indices[(i*6) + 0] = (short) (last + 0);
-            indices[(i*6) + 1] = (short) (last + 1);
-            indices[(i*6) + 2] = (short) (last + 2);
-            indices[(i*6) + 3] = (short) (last + 0);
-            indices[(i*6) + 4] = (short) (last + 2);
-            indices[(i*6) + 5] = (short) (last + 3);
-
-            // Our indices are connected to the vertices so we need to keep them
-            // in the correct order.
-            // normal quad = 0,1,2,0,2,3 so the next one will be 4,5,6,4,6,7
-            last = last + 4;
-        }
+        indices = new short[6];
+        indices = new short[]{0, 1, 2, 0, 2, 3};
 
         // The vertex buffer.
-        ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
+        ByteBuffer bb = ByteBuffer.allocateDirect(vertices1.length * 4);
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.put(vertices);
+        vertexBuffer.put(vertices1);
         vertexBuffer.position(0);
 
         // initialize byte buffer for the draw list
@@ -242,25 +331,24 @@ class GLRenderer implements Renderer {
 
     private void setUpImage() {
         // Create our UV coordinates.
-        float[] uvs1 = new float[]{
+        uvs1 = new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
                 1.0f, 1.0f,
                 1.0f, 0.0f
         };
-        float[] uvs2 = new float[]{
+        uvs2 = new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
                 1.0f, 1.0f,
                 1.0f, 0.0f
         };
-        uvs = Utils.concat(uvs1, uvs2);
 
         // The texture buffer
-        ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
+        ByteBuffer bb = ByteBuffer.allocateDirect(uvs1.length * 4);
         bb.order(ByteOrder.nativeOrder());
         uvBuffer = bb.asFloatBuffer();
-        uvBuffer.put(uvs);
+        uvBuffer.put(uvs1);
         uvBuffer.position(0);
 
         // Generate Textures, if more needed, alter these numbers.
@@ -272,8 +360,9 @@ class GLRenderer implements Renderer {
         Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.carrom_board);
 
         // Bind texture to texturename
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        //GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0]);
+        bgTextureId = texturenames[0];
 
         // Set filtering
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
@@ -289,9 +378,10 @@ class GLRenderer implements Renderer {
         texturenames = new int[1];
         GLES20.glGenTextures(1, texturenames, 0);
         bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.coin_red);
+        redTextureId = texturenames[0];
 
         // Bind texture to texturename
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        //GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0]);
 
         // Set filtering
@@ -305,17 +395,16 @@ class GLRenderer implements Renderer {
         bmp.recycle();
     }
 
-    public void updateSprite() {
+    public void updateSprite(Sprite sprite) {
         // Get new transformed vertices
-        float[] vertices1 = boardBgSprite.getTransformedVertices();
-        float[] vertices2 = redCaromSprite.getTransformedVertices();
-        vertices = Utils.concat(vertices1, vertices2);
+        vertices1 = sprite.getTransformedVertices();
+        //vertices2 = redCaromSprite.getTransformedVertices();
 
         // The vertex buffer.
-        ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
+        ByteBuffer bb = ByteBuffer.allocateDirect(vertices1.length * 4);
         bb.order(ByteOrder.nativeOrder());
         vertexBuffer = bb.asFloatBuffer();
-        vertexBuffer.put(vertices);
+        vertexBuffer.put(vertices1);
         vertexBuffer.position(0);
     }
 
