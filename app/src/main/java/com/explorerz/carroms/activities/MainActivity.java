@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.explorerz.carroms.GLSurf;
+import com.explorerz.carroms.ui.GLSurf;
 import com.explorerz.carroms.R;
 
 public class MainActivity extends AppCompatActivity {

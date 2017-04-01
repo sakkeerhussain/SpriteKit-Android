@@ -8,5 +8,5 @@ public class Game {
     public static final float SIDE_WALL_HEIGHT = 100;
     public static final float TOTAL_HEIGHT = HEIGHT + SIDE_WALL_HEIGHT;
 
-    public static final float RADIUS_COIN = 65;
+    public static final float RADIUS_COIN = 24;
 }

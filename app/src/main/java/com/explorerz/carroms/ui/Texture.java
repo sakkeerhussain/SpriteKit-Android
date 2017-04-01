@@ -46,33 +46,22 @@ public class Texture {
         try {
             if (textureID[0] != 0) {
                 final BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inScaled = false;   // No pre-scaling
+                options.inScaled = false;
 
-                // Read in the resource
                 final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
 
                 width = bitmap.getWidth();
                 height = bitmap.getHeight();
 
-                // Bind to the texture in OpenGL
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID[0]);
 
-                // Set filtering
                 GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
                 GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
                 GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
                 GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
-                // Load the bitmap into the bound texture.
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-                //GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GLES30.GL_COMPRESSED_, bitmap, 0);
-                //Buffer buffer = ByteBuffer.allocate(bitmap.getWidth() * bitmap.getHeight());
-                //bitmap.copyPixelsFromBuffer(buffer);
-                //GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0, GLES20.GL_RGB, bitmap.getWidth(),bitmap.getHeight(),0,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_BYTE, buffer);
-                //GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_RGB, bitmap.getWidth(),bitmap.getHeight(),0,GLES30.GL_RGBA,GLES30.GL_UNSIGNED_BYTE, buffer);
-
-                // Recycle the bitmap, since its data has been loaded into OpenGL.
-                bitmap.recycle();
+               bitmap.recycle();
             }
 
             if (textureID[0] == 0) {

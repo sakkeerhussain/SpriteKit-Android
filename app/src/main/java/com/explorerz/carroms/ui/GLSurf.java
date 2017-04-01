@@ -1,6 +1,7 @@
-package com.explorerz.carroms;
+package com.explorerz.carroms.ui;
 
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
@@ -10,12 +11,16 @@ public class GLSurf extends GLSurfaceView {
 
 	public GLSurf(Context context) {
         super(context);
-		setDebugFlags(GLSurfaceView.DEBUG_LOG_GL_CALLS);
-		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-		setEGLContextClientVersion(2);
-        mRenderer = new GLRenderer(context);
-        setRenderer(mRenderer);
-		setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
+		this.getHolder().setFormat(PixelFormat.RGB_565);
+		this.getHolder().setFormat(PixelFormat.TRANSPARENT);
+
+        this.setDebugFlags(GLSurfaceView.DEBUG_LOG_GL_CALLS);
+        this.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        this.setEGLContextClientVersion(2);
+        this.mRenderer = new GLRenderer(context);
+        this.setRenderer(mRenderer);
+        this.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     @Override

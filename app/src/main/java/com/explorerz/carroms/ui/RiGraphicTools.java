@@ -1,4 +1,4 @@
-package com.explorerz.carroms;
+package com.explorerz.carroms.ui;
 /*
  * Created by sakkeerhussain on 19/03/17.
  */
@@ -39,17 +39,19 @@ class RiGraphicTools {
                     "  v_texCoord = a_texCoord;" +
                     "}";
     static final String fs_Image =
-            "precision mediump float;" +
+                    "precision mediump float;" +
                     "varying vec2 v_texCoord;" +
                     "uniform sampler2D s_texture;" +
                     "void main() {" +
-                    "  gl_FragColor = texture2D( s_texture, v_texCoord );" +
+                    "   vec4 color = texture2D( s_texture, v_texCoord);" +
+                    "   if (color.w < "+Configurations.TRANSPARENCY_ALPHA+") {" +
+                    "       discard;" +
+                    "   }" +
+                    "   else gl_FragColor = color;" +
                     "}";
 
-    static int loadShader(int type, String shaderCode){
+    static int loadShader(int type, String shaderCode) {
 
-        // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
-        // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
         int shader = GLES20.glCreateShader(type);
 
         // add the source code to the shader and compile it
