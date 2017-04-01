@@ -11,14 +11,15 @@ import android.opengl.GLUtils;
  */
 public class Texture {
 
+    private final int resourceId;
     private int textureID[] = {0};
     private int width, height;
 
-    public Texture(final Context context, int resourceId) {
-        loadTexture(context, resourceId);
+    public Texture(int resourceId) {
+        this.resourceId = resourceId;
     }
 
-    public void Destroy() {
+    public void destroy() {
         GLES20.glDeleteTextures(1, textureID, 0);
     }
 
@@ -35,12 +36,12 @@ public class Texture {
         return height;
     }
 
-    public void BindTexture(int id) {
+    public void bindTexture(int id) {
         GLES20.glActiveTexture(id);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID[0]);
     }
 
-    private void loadTexture(final Context context, final int resourceId) {
+    public void loadTexture(final Context context) {
         GLES20.glGenTextures(1, textureID, 0);
 
         try {
@@ -61,7 +62,7 @@ public class Texture {
                 GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-               bitmap.recycle();
+                bitmap.recycle();
             }
 
             if (textureID[0] == 0) {

@@ -5,30 +5,39 @@ package com.explorerz.carroms.ui;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.opengl.GLES20;
 
-import com.explorerz.carroms.game.Game;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
+
+import static android.opengl.GLES20.GL_ONE_MINUS_SRC_ALPHA;
+import static android.opengl.GLES20.GL_SRC_ALPHA;
 
 /*
 @param boardRation: Ration between game UI and game engine, (UI_width/1000)
  */
 
 public class Sprite {
-    private static float boardRatio;
-    protected static float boardSideWidth;
-    protected float angle;
-    protected float scale;
-    protected RectF base;
-    protected PointF translation;
+    private final SpriteKit spriteKit;
+    private float angle;
+    private float scale;
+    private RectF base;
+    private PointF translation;
+    private Texture texture;
 
-    static {
-        boardRatio = 1;
-    }
-
-    public Sprite() {
+    public Sprite(SpriteKit spriteKit, Texture texture) {
         base = new RectF(0f, 0f, 0f, 0f);
         translation = new PointF(0f, 0f);
         scale = 1f;
         angle = 0f;
+        this.texture = texture;
+        this.spriteKit = spriteKit;
+    }
+
+    public Sprite(SpriteKit spriteKit, int resourceId) {
+        this(spriteKit, new Texture(resourceId));
     }
 
     public void translate(float deltaX, float deltaY) {
@@ -47,10 +56,10 @@ public class Sprite {
 
     public float[] getTransformedVertices() {
         // Start with scaling
-        float x1 = base.left * scale * boardRatio;
-        float x2 = base.right * scale * boardRatio;
-        float y1 = base.bottom * scale * boardRatio;
-        float y2 = base.top * scale * boardRatio;
+        float x1 = base.left * scale * spriteKit.boardRatio;
+        float x2 = base.right * scale * spriteKit.boardRatio;
+        float y1 = base.bottom * scale * spriteKit.boardRatio;
+        float y2 = base.top * scale * spriteKit.boardRatio;
 
         // We now detach from our Rect because when rotating,
         // we need the seperate points, so we do so in opengl order
@@ -75,8 +84,8 @@ public class Sprite {
         four.y = x2 * sin + y2 * cos;
 
         // Finally we translate the sprite to its correct position.
-        float translationX = translation.x * boardRatio + boardSideWidth;
-        float translationY = translation.y * boardRatio;
+        float translationX = translation.x * spriteKit.boardRatio + spriteKit.boardSideWidth;
+        float translationY = translation.y * spriteKit.boardRatio + spriteKit.boardSideHeight;
         one.x += translationX;
         one.y += translationY;
         two.x += translationX;
@@ -97,9 +106,68 @@ public class Sprite {
     }
 
     //setters
-    public static void setBoardRatio(float screenWidth, int screenHeight) {
-        float gameUIWidth = screenHeight > screenWidth ? screenWidth : screenHeight;
-        Sprite.boardRatio = gameUIWidth / Game.TOTAL_HEIGHT;
-        Sprite.boardSideWidth = Math.abs(screenWidth - screenHeight) / 2;
+    Texture getTexture() {
+        return texture;
+    }
+
+    void render(float[] matrix, FloatBuffer uvBuffer, ShortBuffer drawListBuffer, short[] indices) {
+        this.draw(matrix, getVertexBuffer(), uvBuffer, drawListBuffer, indices);
+    }
+
+    private void draw(float[] matrix, FloatBuffer vertexBuffer, FloatBuffer uvBuffer, ShortBuffer drawListBuffer, short[] indices) {
+        texture.bindTexture(0);
+        GLES20.glEnable(GLES20.GL_BLEND_COLOR);
+        GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        GLES20.glDepthMask(false);
+        int mPositionHandle = GLES20.glGetAttribLocation(RiGraphicTools.imageShaderProgram, "vPosition");
+        GLES20.glEnableVertexAttribArray(mPositionHandle);
+        GLES20.glVertexAttribPointer(mPositionHandle, 3,
+                GLES20.GL_FLOAT, false,
+                0, vertexBuffer);
+        int mTexCoordLoc = GLES20.glGetAttribLocation(RiGraphicTools.imageShaderProgram, "a_texCoord");
+        GLES20.glEnableVertexAttribArray(mTexCoordLoc);
+        GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT,
+                false,
+                0, uvBuffer);
+        int mtrxhandle = GLES20.glGetUniformLocation(RiGraphicTools.imageShaderProgram, "uMVPMatrix");
+        GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, matrix, 0);
+        int mSamplerLoc = GLES20.glGetUniformLocation(RiGraphicTools.imageShaderProgram, "s_texture");
+        GLES20.glUniform1i(mSamplerLoc, 0);
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length,
+                GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
+        GLES20.glDisableVertexAttribArray(mPositionHandle);
+        GLES20.glDisableVertexAttribArray(mTexCoordLoc);
+        GLES20.glDisable(GLES20.GL_BLEND_COLOR);
+    }
+
+    private FloatBuffer getVertexBuffer() {
+        float[] vertices = this.getTransformedVertices();
+        ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        FloatBuffer vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer.clear();
+        vertexBuffer.put(vertices);
+        vertexBuffer.position(0);
+        return vertexBuffer;
+    }
+
+
+
+
+    //public apis
+    public void setSize(int width, int height){
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
+        base = new RectF(-halfWidth, halfHeight, halfWidth, -halfHeight);
+        //translation = new PointF(halfWidth, halfHeight);
+    }
+    public void setSize(int radius){
+        setSize(radius*2, radius*2);
+    }
+    public void setPosition(PointF center){
+        translation = new PointF(center.x, center.y);
+    }
+    public PointF getPosition(){
+        return new PointF(translation.x, translation.y);
     }
 }
