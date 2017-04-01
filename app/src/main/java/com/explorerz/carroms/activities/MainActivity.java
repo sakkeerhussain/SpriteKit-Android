@@ -10,10 +10,9 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.explorerz.carroms.R;
-import com.explorerz.carroms.ui.Sprite;
-import com.explorerz.carroms.ui.SpriteKit;
-import com.explorerz.carroms.ui.SpriteKitSurfaceView;
-import com.explorerz.carroms.ui.Texture;
+import com.explorerz.carroms.spritekit.Sprite;
+import com.explorerz.carroms.spritekit.SpriteKit;
+import com.explorerz.carroms.spritekit.Texture;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,7 +21,6 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SpriteKitSurfaceView glSurfaceView;
     private SpriteKit spriteKit;
     private ArrayList<Sprite> coinSprites;
 
