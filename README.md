@@ -3,7 +3,7 @@ Android 2D image UI rendering tool using open GL technology
 
 1. Developers can add a view group in their ui an pass a reference of that on initialising sprite kit. 
 
-    @Override
+```    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -11,33 +11,43 @@ Android 2D image UI rendering tool using open GL technology
         FrameLayout parentLayout = (FrameLayout) findViewById(R.id.parentLayout);
         setupSpriteKit(parentLayout);
     }
+```
 
 
 2. Create Texture object.
 
 Texture represents a particular image, Can be created by passing reference of a drawable resource id.
-Eg: Texture whiteCoinTexture = new Texture(R.drawable.coin_white);
+Eg: ```Texture whiteCoinTexture = new Texture(R.drawable.coin_white);```
 
 
 3. Create Sprite object.
 
 Sprite reoresents an object in the UI, and user can updated positio and size dynamically by keeping reference of the same.
-Eg: Sprite bgSprite = new Sprite(spriteKit, R.drawable.carrom_board);
+Eg: 
+```
+    Sprite bgSprite = new Sprite(spriteKit, R.drawable.carrom_board);
     Sprite whiteSprite = new Sprite(spriteKit, whiteCoinTexture);
+```
     
 Size and position of sprite can be updated by its reference.
-Eg: bgSprite.setPosition(new PointF(500,500));  //sentting center point of sprite
+Eg: 
+```
+    bgSprite.setPosition(new PointF(500,500));  //sentting center point of sprite
     bgSprite.setSize(1000, 1000);               //using width and height
     bgSprite.setSize(500);                      //using radius
+```
 
 Sprite should add to sprite kit before view created. by calling spriteKit.addSprite() methord.
-Eg: spriteKit.addSprite(bgSprite);
-
+Eg: 
+```
+spriteKit.addSprite(bgSprite);
+```
 
 
 
 A carom board UI example is added below with coins moving randomly.
 ==================================================================
+```
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,5 +110,5 @@ A carom board UI example is added below with coins moving randomly.
                 shuffleCoinPosition();
             }
         }, 500);
-
     }
+```
