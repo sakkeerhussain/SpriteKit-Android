@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.explorerz.carroms.R;
+import com.explorerz.carroms.game.Game;
 import com.explorerz.carroms.spritekit.Sprite;
 import com.explorerz.carroms.spritekit.SpriteKit;
 import com.explorerz.carroms.spritekit.Texture;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         FrameLayout parentLayout = (FrameLayout) findViewById(R.id.parentLayout);
         setupSpriteKit(parentLayout);
+
+        Game game = new Game();
     }
 
     private void setupSpriteKit(ViewGroup parentLayout) {
