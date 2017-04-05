@@ -24,7 +24,7 @@ public class SpriteKitGraphicTools {
                     "uniform sampler2D s_texture;" +
                     "void main() {" +
                     "   vec4 color = texture2D( s_texture, v_texCoord);" +
-                    "   if (color.w < "+ SpriteKit.UIConfigs.TRANSPARENCY_ALPHA+") {" +
+                    "   if (color.w < " + SpriteKit.UIConfigs.getTransparencyAlpha() + ") {" +
                     "       discard;" +
                     "   }" +
                     "   else gl_FragColor = color;" +

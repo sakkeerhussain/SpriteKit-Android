@@ -3,8 +3,10 @@ package com.explorerz.carroms.activities;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -34,9 +36,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSpriteKit(ViewGroup parentLayout) {
-        SpriteKit.UIConfigs.HEIGHT = 1000;
-        SpriteKit.UIConfigs.WIDTH = 1000;
+        SpriteKit.UIConfigs.setHeight(1000);
+        SpriteKit.UIConfigs.setwidth(1000);
+        SpriteKit.UIConfigs.setTransparencyAlpha(0.5f);
         spriteKit = new SpriteKit(this, parentLayout);
+        spriteKit.setOnTouchListener(new SpriteKit.OnTouchEventListener() {
+            @Override
+            public boolean onTouch(MotionEvent e) {
+                if (e.getAction() == MotionEvent.ACTION_DOWN){
+                    Log.d("Touch", "DOWN, point: x="+e.getX()+", y="+e.getY());
+                    return true;
+                }else if (e.getAction() == MotionEvent.ACTION_MOVE){
+                    Log.d("Touch", "MOVE, point: x="+e.getX()+", y="+e.getY());
+                    return true;
+                }else if (e.getAction() == MotionEvent.ACTION_UP){
+                    Log.d("Touch", "UP, point: x="+e.getX()+", y="+e.getY());
+                    return true;
+                }
+                return false;
+            }
+        });
         Texture whiteCoinTexture = new Texture(R.drawable.coin_white);
         Texture blckCoinTexture = new Texture(R.drawable.coin_black);
 

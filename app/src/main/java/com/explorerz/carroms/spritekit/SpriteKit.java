@@ -7,6 +7,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class SpriteKit {
     float boardRatio = 1;
     float boardSideWidth;
     float boardSideHeight;
+    private OnTouchEventListener mListenre;
 
     public SpriteKit(Context context, ViewGroup viewGroup) {
         sprites = new ArrayList<>();
@@ -44,8 +46,7 @@ public class SpriteKit {
     }
 
     boolean onTouchEvent(MotionEvent e) {
-        Log.d("Touch", "Touched, t="+e);
-        return true;
+        return mListenre != null && mListenre.onTouch(e);
     }
 
     List<Sprite> getSprites() {
@@ -78,10 +79,31 @@ public class SpriteKit {
 
 
     public static class UIConfigs {
-        public static float HEIGHT = 1000;
-        public static float WIDTH = 1000;
+        private static float HEIGHT = 1000;
+        private static float WIDTH = 1000;
+        private static String TRANSPARENCY_ALPHA = "0.5";
+        public static boolean setHeight(float height) {
+            UIConfigs.HEIGHT = height;
+            return true;
+        }
+        public static boolean setwidth(float width) {
+            UIConfigs.WIDTH = width;
+            return true;
+        }
+        public static boolean setTransparencyAlpha(float transparencyAlpha) {
+            if (transparencyAlpha > 1 || transparencyAlpha<0){
+                return false;
+            }
+            TRANSPARENCY_ALPHA = String.valueOf(transparencyAlpha);
+            return true;
+        }
+        public static String getTransparencyAlpha() {
+            return TRANSPARENCY_ALPHA;
+        }
+    }
 
-        public static final String TRANSPARENCY_ALPHA = "0.5";
+    public interface OnTouchEventListener {
+        boolean onTouch(MotionEvent e);
     }
 
 
@@ -94,5 +116,9 @@ public class SpriteKit {
             return sprites.add(sprite);
         }
         return false;
+    }
+
+    public void setOnTouchListener(OnTouchEventListener mListenre) {
+        this.mListenre = mListenre;
     }
 }
