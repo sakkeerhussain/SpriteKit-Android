@@ -38,7 +38,7 @@ Eg: spriteKit.addSprite(bgSprite);
 
 A carom board UI example is added below with coins moving randomly.
 ==================================================================
-@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
