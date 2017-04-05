@@ -16,7 +16,7 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-class GLRenderer implements Renderer {
+class SpriteKitRenderer implements Renderer {
 
     // Our matrices
     private final float[] mtrxProjection = new float[16];
@@ -41,7 +41,7 @@ class GLRenderer implements Renderer {
     private long mLastTime;
     int mProgram;
 
-    GLRenderer(Context c, SpriteKit spriteKit) {
+    SpriteKitRenderer(Context c, SpriteKit spriteKit) {
         mContext = c;
         mLastTime = System.currentTimeMillis() + 100;
         this.spriteKit = spriteKit;
@@ -95,15 +95,15 @@ class GLRenderer implements Renderer {
         setUpBuffers();
         setUpSprites();
         GLES20.glClearColor(235f / 255.0f, 235f / 255.0f, 255f / 255.0f, 255f / 255.0f);
-        int vertexShader = RiGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER,
-                RiGraphicTools.imageVertexShader);
-        int fragmentShader = RiGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER,
-                RiGraphicTools.imageFragmentShader);
-        RiGraphicTools.imageShaderProgram = GLES20.glCreateProgram();
-        GLES20.glAttachShader(RiGraphicTools.imageShaderProgram, vertexShader);
-        GLES20.glAttachShader(RiGraphicTools.imageShaderProgram, fragmentShader);
-        GLES20.glLinkProgram(RiGraphicTools.imageShaderProgram);
-        GLES20.glUseProgram(RiGraphicTools.imageShaderProgram);
+        int vertexShader = SpriteKitGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER,
+                SpriteKitGraphicTools.imageVertexShader);
+        int fragmentShader = SpriteKitGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER,
+                SpriteKitGraphicTools.imageFragmentShader);
+        SpriteKitGraphicTools.imageShaderProgram = GLES20.glCreateProgram();
+        GLES20.glAttachShader(SpriteKitGraphicTools.imageShaderProgram, vertexShader);
+        GLES20.glAttachShader(SpriteKitGraphicTools.imageShaderProgram, fragmentShader);
+        GLES20.glLinkProgram(SpriteKitGraphicTools.imageShaderProgram);
+        GLES20.glUseProgram(SpriteKitGraphicTools.imageShaderProgram);
     }
 
     private void setUpBuffers() {

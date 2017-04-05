@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSpriteKit(ViewGroup parentLayout) {
+        SpriteKit.UIConfigs.HEIGHT = 1000;
+        SpriteKit.UIConfigs.WIDTH = 1000;
         spriteKit = new SpriteKit(this, parentLayout);
         Texture whiteCoinTexture = new Texture(R.drawable.coin_white);
         Texture blckCoinTexture = new Texture(R.drawable.coin_black);

@@ -15,7 +15,7 @@ import java.util.List;
 public class SpriteKit {
 
     private final SpriteKitSurfaceView glSurfaceView;
-    private final GLRenderer mRenderer;
+    private final SpriteKitRenderer mRenderer;
     private List<Sprite> sprites;
     private List<Texture> textures;
     float boardRatio = 1;
@@ -28,7 +28,7 @@ public class SpriteKit {
         glSurfaceView = new SpriteKitSurfaceView(context.getApplicationContext(), this);
         viewGroup.addView(glSurfaceView);
 
-        this.mRenderer = new GLRenderer(context, this);
+        this.mRenderer = new SpriteKitRenderer(context, this);
         glSurfaceView.setRenderer(mRenderer);
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
@@ -64,16 +64,24 @@ public class SpriteKit {
 
         boardSideWidth = 0;
         boardSideHeight = 0;
-        float heightRatio = screenHeight / UIConfigs.TOTAL_HEIGHT;
-        float widthAccordingToHeightRatio = heightRatio * UIConfigs.TOTAL_WIDTH;
+        float heightRatio = screenHeight / UIConfigs.HEIGHT;
+        float widthAccordingToHeightRatio = heightRatio * UIConfigs.WIDTH;
         if (widthAccordingToHeightRatio < screenWidth) {
             boardRatio = heightRatio;
             boardSideWidth = (screenWidth - widthAccordingToHeightRatio) / 2;
         } else {
-            boardRatio = screenWidth / UIConfigs.TOTAL_WIDTH;
-            float heightAccordingRatio = boardRatio * UIConfigs.TOTAL_HEIGHT;
+            boardRatio = screenWidth / UIConfigs.WIDTH;
+            float heightAccordingRatio = boardRatio * UIConfigs.HEIGHT;
             boardSideHeight = (screenHeight - heightAccordingRatio) / 2;
         }
+    }
+
+
+    public static class UIConfigs {
+        public static float HEIGHT = 1000;
+        public static float WIDTH = 1000;
+
+        public static final String TRANSPARENCY_ALPHA = "0.5";
     }
 
 

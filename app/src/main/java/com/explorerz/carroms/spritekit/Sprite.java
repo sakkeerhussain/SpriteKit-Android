@@ -119,19 +119,19 @@ public class Sprite {
         GLES20.glEnable(GLES20.GL_BLEND_COLOR);
         GLES20.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         GLES20.glDepthMask(false);
-        int mPositionHandle = GLES20.glGetAttribLocation(RiGraphicTools.imageShaderProgram, "vPosition");
+        int mPositionHandle = GLES20.glGetAttribLocation(SpriteKitGraphicTools.imageShaderProgram, "vPosition");
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         GLES20.glVertexAttribPointer(mPositionHandle, 3,
                 GLES20.GL_FLOAT, false,
                 0, vertexBuffer);
-        int mTexCoordLoc = GLES20.glGetAttribLocation(RiGraphicTools.imageShaderProgram, "a_texCoord");
+        int mTexCoordLoc = GLES20.glGetAttribLocation(SpriteKitGraphicTools.imageShaderProgram, "a_texCoord");
         GLES20.glEnableVertexAttribArray(mTexCoordLoc);
         GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT,
                 false,
                 0, uvBuffer);
-        int mtrxhandle = GLES20.glGetUniformLocation(RiGraphicTools.imageShaderProgram, "uMVPMatrix");
+        int mtrxhandle = GLES20.glGetUniformLocation(SpriteKitGraphicTools.imageShaderProgram, "uMVPMatrix");
         GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, matrix, 0);
-        int mSamplerLoc = GLES20.glGetUniformLocation(RiGraphicTools.imageShaderProgram, "s_texture");
+        int mSamplerLoc = GLES20.glGetUniformLocation(SpriteKitGraphicTools.imageShaderProgram, "s_texture");
         GLES20.glUniform1i(mSamplerLoc, 0);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length,
                 GLES20.GL_UNSIGNED_SHORT, drawListBuffer);

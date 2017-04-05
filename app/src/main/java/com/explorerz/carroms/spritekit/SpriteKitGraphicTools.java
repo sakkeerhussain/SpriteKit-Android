@@ -5,7 +5,7 @@ package com.explorerz.carroms.spritekit;
 
 import android.opengl.GLES20;
 
-public class RiGraphicTools {
+public class SpriteKitGraphicTools {
 
     public static int imageShaderProgram;
 
@@ -24,7 +24,7 @@ public class RiGraphicTools {
                     "uniform sampler2D s_texture;" +
                     "void main() {" +
                     "   vec4 color = texture2D( s_texture, v_texCoord);" +
-                    "   if (color.w < "+ UIConfigs.TRANSPARENCY_ALPHA+") {" +
+                    "   if (color.w < "+ SpriteKit.UIConfigs.TRANSPARENCY_ALPHA+") {" +
                     "       discard;" +
                     "   }" +
                     "   else gl_FragColor = color;" +
