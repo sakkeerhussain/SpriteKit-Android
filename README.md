@@ -3,7 +3,8 @@ Android 2D image UI rendering tool using open GL technology
 
 1. Developers can add a view group in their ui an pass a reference of that on initialising sprite kit. 
 
-```    @Override
+```java
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -18,21 +19,23 @@ Android 2D image UI rendering tool using open GL technology
 
 Texture represents a particular image, Can be created by passing reference of a drawable resource id.
 Eg: 
-```Texture whiteCoinTexture = new Texture(R.drawable.coin_white);```
+```java
+Texture whiteCoinTexture = new Texture(R.drawable.coin_white);
+```
 
 
 3. Create Sprite object.
 
 Sprite reoresents an object in the UI, and user can updated positio and size dynamically by keeping reference of the same.
 Eg: 
-```
+```java
     Sprite bgSprite = new Sprite(spriteKit, R.drawable.carrom_board);
     Sprite whiteSprite = new Sprite(spriteKit, whiteCoinTexture);
 ```
     
 Size and position of sprite can be updated by its reference.
 Eg: 
-```
+```java
     bgSprite.setPosition(new PointF(500,500));  //sentting center point of sprite
     bgSprite.setSize(1000, 1000);               //using width and height
     bgSprite.setSize(500);                      //using radius
@@ -40,7 +43,7 @@ Eg:
 
 Sprite should add to sprite kit before view created. by calling spriteKit.addSprite() methord.
 Eg: 
-```
+```java
 spriteKit.addSprite(bgSprite);
 ```
 
@@ -48,7 +51,7 @@ spriteKit.addSprite(bgSprite);
 
 A carom board UI example is added below with coins moving randomly.
 ==================================================================
-```
+```java
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
