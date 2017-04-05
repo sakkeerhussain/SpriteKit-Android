@@ -17,7 +17,8 @@ Android 2D image UI rendering tool using open GL technology
 2. Create Texture object.
 
 Texture represents a particular image, Can be created by passing reference of a drawable resource id.
-Eg: ```Texture whiteCoinTexture = new Texture(R.drawable.coin_white);```
+Eg: 
+```Texture whiteCoinTexture = new Texture(R.drawable.coin_white);```
 
 
 3. Create Sprite object.
