@@ -3,14 +3,14 @@ Android 2D image UI rendering tool using open GL technology
 
 1. Developers can add a view group in their ui an pass a reference of that on initialising sprite kit. 
 
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-  super.onCreate(savedInstanceState);
-  setContentView(R.layout.activity_main);
-  getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-  FrameLayout parentLayout = (FrameLayout) findViewById(R.id.parentLayout);
-  setupSpriteKit(parentLayout);
-}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        FrameLayout parentLayout = (FrameLayout) findViewById(R.id.parentLayout);
+        setupSpriteKit(parentLayout);
+    }
 
 
 2. Create Texture object.
