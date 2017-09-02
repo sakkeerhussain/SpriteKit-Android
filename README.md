@@ -1,4 +1,4 @@
-# SpriteKit-Android
+## SpriteKit-Android
 Android 2D image UI rendering tool using open GL technology
 
 1. Developers can add a view group in their ui an pass a reference of that on initialising sprite kit. 
@@ -116,3 +116,37 @@ A carom board UI example is added below with coins moving randomly.
         }, 500);
     }
 ```
+
+## Dependency
+
+Add jitpack.io to your root build.gradle, eg:
+
+```groovy
+allprojects {
+    repositories {
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+
+then add the dependency to your project build.gradle:
+
+```groovy
+dependencies {
+    compile 'com.github.sakkeerhussain:SpriteKit-Android:1.0'
+}
+```
+You can find the latest version in the releases tab above: https://github.com/sakkeerhussain/SpriteKit-Android/releases
+
+More options at jitpack.io: https://jitpack.io/#sakkeerhussain/SpriteKit-Android
+
+## Licence
+
+Full licence here: https://github.com/sakkeerhussain/SpriteKit-Android/blob/master/LICENSE
+
+In short:
+
+> A permissive license whose main conditions require preservation of copyright and license notices. Contributors provide an express grant of patent rights. Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+
+
